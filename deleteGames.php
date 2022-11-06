@@ -65,18 +65,17 @@ function displayGames($connection, $sql, $result) {
             margin: 0 auto;
             font-size: large;
             border: 1px solid black;
+            background: linear-gradient(to right, #207cca 0%,#9f58a3 100%);
         }
  
         h1 {
             text-align: center;
-            color: #006600;
             font-size: xx-large;
             font-family: 'Gill Sans', 'Gill Sans MT',
             ' Calibri', 'Trebuchet MS', 'sans-serif';
         }
  
         td {
-            background-color: #E4F5D4;
             border: 1px solid black;
         }
  
@@ -91,6 +90,25 @@ function displayGames($connection, $sql, $result) {
         td {
             font-weight: lighter;
         }
+
+        input[type=submit] {
+            display: block;
+            margin: 20px auto 0;
+            width: 150px;
+            height: 40px;
+            border-radius: 25px;
+            border: none;
+            color: #eee;
+            font-weight: 700;
+            box-shadow: 1px 4px 10px 1px #aaa;
+            cursor: pointer;
+            
+            background: #207cca; /* Old browsers */
+            background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to right, #207cca 0%,#9f58a3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#9f58a3',GradientType=1 ); /* IE6-9 */
+            }
     </style>
     <head>
         <meta charset="utf-8">
@@ -121,7 +139,7 @@ function displayGames($connection, $sql, $result) {
         {
     ?>
     <tr>
-        <td><?php echo "<input type='checkbox' name='check[]' value='{$rows["id"]}'>";?><?php echo $rows['id'];?></td>
+        <td><?php echo "<input type='checkbox' name='check[]' value='{$rows["id"]}'>";?></td>
         <td><?php echo $rows['game_name'];?></td>
         <td><?php echo $rows['publisher'];?></td>
         <td><?php echo $rows['developer'];?></td>
@@ -131,6 +149,7 @@ function displayGames($connection, $sql, $result) {
         }?>
 </table>
 <input type="submit" value="Delete Selected" name="deleteBtn"/>
+<input type="submit" value="Main Menu" name="mainMenuBtn"/>
     </form>
 <?php
 
@@ -140,6 +159,12 @@ function displayGames($connection, $sql, $result) {
                     deleteGame($conn, $value);
                 }
             }
+            header( "Location: deleteGames.php" ); //reload page once game is deleted
+        }
+
+        //bring user back to main menu if main menu button is clicked
+        if(isset($_POST['mainMenuBtn'])){
+            header( "Location: mainMenu.php" );
         }
 
         //*need to reload table after deleting to show updated table

@@ -22,7 +22,6 @@ function displayGames($sql, $result) {
     ?>
     <table>
     <tr>
-        <th></th>
         <th>Game</th>
         <th>Publisher</th>
         <th>Developer</th>
@@ -33,7 +32,6 @@ function displayGames($sql, $result) {
         {
     ?>
     <tr>
-        <td><?php echo $rows['id'];?></td>
         <td><?php echo $rows['game_name'];?></td>
         <td><?php echo $rows['publisher'];?></td>
         <td><?php echo $rows['developer'];?></td>
@@ -58,18 +56,19 @@ function displayGames($sql, $result) {
             margin: 0 auto;
             font-size: large;
             border: 1px solid black;
+            background: linear-gradient(to right, #207cca 0%,#9f58a3 100%);
         }
  
         h1 {
             text-align: center;
-            color: #006600;
+            color: linear-gradient(to right, #207cca 0%,#9f58a3 100%);
             font-size: xx-large;
             font-family: 'Gill Sans', 'Gill Sans MT',
             ' Calibri', 'Trebuchet MS', 'sans-serif';
         }
  
         td {
-            background-color: #E4F5D4;
+            background: linear-gradient(to right, #207cca 0%,#9f58a3 100%);
             border: 1px solid black;
         }
  
