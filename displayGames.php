@@ -52,6 +52,24 @@ function displayGames($sql, $result) {
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
 <style>
+  input[type=button] {
+  display: block;
+  margin: 20px auto 0;
+  width: 150px;
+  height: 40px;
+  border-radius: 25px;
+  border: none;
+  color: #eee;
+  font-weight: 700;
+  box-shadow: 1px 4px 10px 1px #aaa;
+  cursor: pointer;
+  
+  background: #207cca; /* Old browsers */
+  background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #207cca 0%,#9f58a3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#9f58a3',GradientType=1 ); /* IE6-9 */
+}
         table {
             margin: 0 auto;
             font-size: large;
@@ -99,6 +117,7 @@ function displayGames($sql, $result) {
         <h1>Games</h1>
 
         <?php displayGames($games_sql, $result_games); ?>
+        <input type="button" onclick="location.href='mainMenu.php';" value="Main Menu" />
         
         <script src="" async defer></script>
     </body>

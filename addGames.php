@@ -166,7 +166,9 @@ function addGame($name, $publisher, $developer, $date){
       <input type="text" name="gamename" placeholder="Game Name" required></input>
       <input type="text" name="publisher" placeholder="Publisher" required></input>
       <input type="text" name="developer" placeholder="Developer" required></input>
-      <input type="text" name="releasedate" placeholder="Release Date" required></input>
+      <!--<input type="text" name="releasedate" placeholder="Release Date (YYYY-DD-MM)" required></input>-->
+      <label for="releasedate">Release Date:</label>
+      <input type="date" id="releasedate" name="releasedate" min="1950-01-01" max="2025-12-31" required></input>
       <input type="submit" value="Add Game" id="addGameBtn" name="addGameBtn"/><br>
     </form>
   </div>
