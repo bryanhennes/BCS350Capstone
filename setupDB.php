@@ -22,7 +22,7 @@ $users_table = "CREATE TABLE IF NOT EXISTS Users  (
     lastname VARCHAR(30) NOT NULL, 
     email VARCHAR(50) NOT NULL,
     joindate DATE NOT NULL,
-    passwd VARCHAR(50) NOT NULL
+    passwd VARCHAR(80) NOT NULL
     )";
 
 $result_users = $conn->query($users_table);

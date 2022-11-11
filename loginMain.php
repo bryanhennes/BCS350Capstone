@@ -1,3 +1,30 @@
+<?php
+require_once 'login.php';
+$conn = new mysqli($hn, $un, $pw, $db);
+//check user data
+if($conn->connect_error){
+    die("Fatal Error");
+
+}
+
+
+//create connection
+    $conn = new mysqli($hn, $un, $pw, $db);
+    //check connection
+    if($conn->connect_error){
+        die("Fatal Error");
+
+    }
+ 
+
+
+
+?>
+
+
+
+
+
 <!DOCTYPE html>
 
 <html>
@@ -150,23 +177,28 @@ body {
       <div class="title">Welcome</div>
       <div class="subtitle">Login</div>
       <div class="input-container ic1">
-        <input id="username" class="input" type="text" placeholder=" " />
+        <input id="username" name="username" class="input" type="text" placeholder=" " required/>
         <div class="cut"></div>
         <label for="username" class="placeholder">Username</label>
       </div>
       <div class="input-container ic2">
-        <input id="password" class="input" type="text" placeholder=" " />
+        <input id="password" name="password" class="input" type="text" placeholder=" " required/>
         <div class="cut"></div>
         <label for="password" class="placeholder">Password</label>
       </div>
-      <form method="post" action="mainMenu.php" >  
+      <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" >  
             <button type="submit" class="submit">Login</button>
             <!-- This should use dbprocess.php as action to check login credentials -->
             <!-- For now bring to main menu instead-->
             
         </form>
-
+      <input type="button" class="submit" onclick="location.href='register.php';" value="Create an Account" />
     </div>
+
+
+    <?php
+
+    ?>
 
         
         <script src="" async defer></script>
