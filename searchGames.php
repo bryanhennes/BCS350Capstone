@@ -240,7 +240,7 @@ table {
       <input type="submit" value="Search" id="searchBtn" name="searchBtn"/><br>
     </form>
   </div>
-  <input type="button" onclick="location.href='mainMenu.php';" value="Main Menu" />
+  <input type="button" onclick="location.href='index.php';" value="Main Menu" />
 </div>
     
 

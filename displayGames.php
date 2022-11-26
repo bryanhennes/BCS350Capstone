@@ -117,7 +117,7 @@ function displayGames($sql, $result) {
         <h1>Games</h1>
 
         <?php displayGames($games_sql, $result_games); ?>
-        <input type="button" onclick="location.href='mainMenu.php';" value="Main Menu" />
+        <input type="button" onclick="location.href='index.php';" value="Main Menu" />
         
         <script src="" async defer></script>
     </body>

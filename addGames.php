@@ -172,7 +172,7 @@ function addGame($name, $publisher, $developer, $date){
       <input type="submit" value="Add Game" id="addGameBtn" name="addGameBtn"/><br>
     </form>
   </div>
-  <input type="button" onclick="location.href='mainMenu.php';" value="Main Menu" />
+  <input type="button" onclick="location.href='index.php';" value="Main Menu" />
 </div>
     
     

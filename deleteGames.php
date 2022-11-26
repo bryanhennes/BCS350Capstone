@@ -164,7 +164,7 @@ function displayGames($connection, $sql, $result) {
 
         //bring user back to main menu if main menu button is clicked
         if(isset($_POST['mainMenuBtn'])){
-            header( "Location: mainMenu.php" );
+            header( "Location: index.php" );
         }
 
         //*need to reload table after deleting to show updated table

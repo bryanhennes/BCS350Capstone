@@ -1,3 +1,26 @@
+
+<?php
+session_start();
+//if not logged in go to login page
+if(isset($_SESSION['username'])==null){
+    session_unset();
+    session_destroy();
+    header("Location: loginMain.php");
+}
+
+if(isset($_POST['logoutBtn'])){
+  logout();
+}
+
+//if logout is clicked bring user back to login page
+function logout(){
+  session_unset();
+  session_destroy();
+  header("Location: loginMain.php");
+}
+
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -114,7 +137,7 @@
     </form> -->
 
     <div id="feedback-form">
-  <h2 class="header">Welcome</h2>
+  <h2 class="header">Welcome, <?php echo $_SESSION['username'];?></h2>
   <div>
     <form method="post">
     <input type="button" onclick="location.href='displayGames.php';" value="Show Games" />
@@ -122,6 +145,7 @@
     <input type="button" onclick="location.href='addGames.php';" value="Add Game" />
     <input type="button" onclick="location.href='deleteGames.php';" value="Delete Game" />
     <input type="button" onclick="location.href='searchGames.php';" value="Search" />
+    <input type="submit" id="logoutBtn" name="logoutBtn" value="Log Out" />
     </form>
   </div>
 </div>
