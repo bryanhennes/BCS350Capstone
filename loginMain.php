@@ -10,19 +10,22 @@ if(isset($_POST['username'])){
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  $sql = "SELECT * FROM users WHERE username ='$username' AND passwd='$password'";
-
+  //$sql = "SELECT * FROM users WHERE username ='$username' AND passwd='$password'";
+  $sql = "SELECT * FROM users WHERE username ='$username'";
   $result = $conn->query($sql);
 
   if (mysqli_num_rows($result)>0){
     session_start();
     $row=$result->fetch_assoc();
-    $_SESSION['username'] = $row['username'];
-    header("Location: index.php");
+    if(password_verify($password, $row['passwd'])){
+      $_SESSION['username'] = $row['username'];
+      header("Location: index.php");
+    }
   }
 
   else{
     echo "Incorrect username or password";
+    echo $password;
   }
 }
 
