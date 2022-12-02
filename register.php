@@ -150,16 +150,7 @@ function addUser($userName, $firstName, $lastName, $email, $date, $password){
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <!--<div class="form">
-        <form method="post">
-           Game Name: <input type="text" id="name" name="gamename" required /><br>
-           Publisher: <input type="text" name="publisher" required /><br>
-            Developer: <input type="text" name="developer" required /><br>
-            Release Date: <input type="text" name="releasedate" required /><br>
-            <input type="submit" value="Add Game" name="addGameBtn"/><br>
-            
-
-        </form>-->
+       
         <div id="feedback-form">
   <h2 class="header">Register</h2>
   <div>
