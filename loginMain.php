@@ -21,12 +21,21 @@ if(isset($_POST['username'])){
       $_SESSION['username'] = $row['username'];
       header("Location: index.php");
     }
+    else{
+      $message = "Incorrect username or password";
+      alert_user($message);
+    }
+  }
+  else {
+    echo "Username does not exist!";
   }
 
-  else{
-    echo "Incorrect username or password";
-    echo $password;
-  }
+  
+}
+
+function alert_user($message) {
+      // Display the alert box 
+  echo "<script>alert('$message');</script>";
 }
 
 ?>

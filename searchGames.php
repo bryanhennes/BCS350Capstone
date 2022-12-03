@@ -10,26 +10,116 @@ if($conn->connect_error){
 
 }
 
+//use this function to see if there are any possible results from search query
+function checkResults($connection, $searchBy, $keyword){
+
+  if($searchBy == 'gamename'){
+    $category = 'game_name';
+    $sql = "SELECT game_name FROM games";
+  }
+  else if($searchBy == 'publisher'){
+    $category = 'publisher';
+    $sql = "SELECT publisher FROM games";
+  }
+  else if($searchBy == 'developer'){
+    $category = 'developer';
+    $sql = "SELECT developer FROM games";
+  }
+  else{
+    $category = 'release_date';
+    $sql = "SELECT release_date FROM games";
+  }
+  $result = $connection->query($sql);
+
+
+  $pattern = "/$keyword/i";
+  $counter = 0;
+        while($rows=$result->fetch_assoc())
+        {
+          if(preg_match($pattern, $rows[$category]) == 0){
+            
+            $rows++;
+          }
+          else{
+            $counter++;
+          }
+
+        }
+
+  return $counter;
+}
+
+function keywordToSearchBy($connection, $searchBy, $explosion){
+  $newKeyword = "";
+  if($searchBy == 'gamename'){
+    $category = 'game_name';
+    $sql = "SELECT game_name FROM games";
+  }
+  else if($searchBy == 'publisher'){
+    $category = 'publisher';
+    $sql = "SELECT publisher FROM games";
+  }
+  else if($searchBy == 'developer'){
+    $category = 'developer';
+    $sql = "SELECT developer FROM games";
+  }
+  else{
+    $category = 'release_date';
+    $sql = "SELECT release_date FROM games";
+  }
+  $result = $connection->query($sql);
+
+  //foreach($explosion as $keyword){
+  for($i =0; $i<sizeof($explosion);$i++){
+    $keyword = $explosion[$i];
+    $pattern = "/$keyword/i";
+    $counter = 0;
+          while($rows=$result->fetch_assoc())
+          {
+            if(preg_match($pattern, $rows[$category]) == 0){
+              
+              $rows++;
+            }
+            else{
+              $newKeyword = $keyword;
+            }
+
+          }
+  }
+  return $newKeyword;
+
+}
+
+
+
 //search database for keyword inputted by user
 function search($connection, $keyword, $searchBy){
 
+   // $keywordExplode = explode(" ", $keyword); //split search entry by spaces to check each individual word
+
+    //$newKeyword = keywordToSearchBy($connection, $searchBy, $keywordExplode);
+    //regular expression pattern to query similar terms from database
+    $pattern = "/$keyword/i";
+      
+    $searchQuery = "SELECT * FROM games";
+
     //if user is searching by game name
     if($searchBy == 'gamename'){
-        $searchQuery = "SELECT * FROM games WHERE game_name='".$keyword."';";
+        $category = "game_name";
     }
     else if($searchBy == 'publisher'){
-        $searchQuery = "SELECT * FROM games WHERE publisher='".$keyword."';";
+      $category = "publisher";
     }
     else if($searchBy == 'developer'){
-        $searchQuery = "SELECT * FROM games WHERE developer='".$keyword."';";
+      $category = "developer";
     }
     else {
-        $searchQuery = "SELECT * FROM games WHERE release_date='".$keyword."';";
+      $category = "release_date";
     }
     $result = $connection->query($searchQuery);
 
     //if query returns no results
-    if (mysqli_num_rows($result)==0) { 
+    if(checkResults($connection, $searchBy, $keyword) == 0){
         ?>
         <h1> No results found for: <?php echo $searchBy.': "'.$keyword.'"'; ?></h1> <?php
         return;
@@ -45,8 +135,14 @@ function search($connection, $keyword, $searchBy){
         <th>Release Date</th>
     </tr>
     <?php
+        $counter = 0;
         while($rows=$result->fetch_assoc())
         {
+          if(preg_match($pattern, $rows[$category]) == 0){
+            
+            $rows++;
+          }
+          else{ $counter++;
     ?>
     <tr>
         <td><?php echo $rows['game_name'];?></td>
@@ -55,7 +151,9 @@ function search($connection, $keyword, $searchBy){
         <td><?php echo $rows['release_date'];?></td>
     </tr>
     <?php
-        }?>
+          }
+        } 
+        ?>
 </table>
 <?php
 
@@ -250,6 +348,10 @@ table {
             $selectOption = $_POST['options']; //get field user is searching in
             $searchTerm = $conn->real_escape_string($_POST['searchField']); //get keyword user is searching for
             search($conn, $searchTerm, $selectOption); //search
+            //$results = getAllGames($conn);
+            //$pattern = "/$searchTerm/i";
+            //echo preg_match($pattern, $results[0]);
+            
     
         } 
 
