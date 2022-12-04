@@ -26,7 +26,12 @@ function logout(){
 <html>
 
 <style>
-        #feedback-form {
+html {
+  background: rgb(63,94,251);
+  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+}
+
+#feedback-form {
   width: 280px;
   margin: 0 auto;
   background-color: #fcfcfc;

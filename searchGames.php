@@ -171,6 +171,10 @@ function search($connection, $keyword, $searchBy){
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
 <style> 
+html {
+  background: rgb(63,94,251);
+  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+}
 
 table {
             margin: 0 auto;

@@ -51,8 +51,12 @@ function alert_user($message) {
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body{ font: 14px sans-serif; }
+        body{ font: 14px sans-serif; width: 360px; margin: 0 auto; }
         .wrapper{ width: 360px; padding: 20px; }
+        html {
+        background: rgb(63,94,251);
+        background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+        }
     </style>
 </head>
 <body>
