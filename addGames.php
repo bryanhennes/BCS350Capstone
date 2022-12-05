@@ -3,11 +3,30 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 //retrieve mysql login data
 
+require_once 'login.php';
+
+//create connection
+$conn = new mysqli($hn, $un, $pw, $db);
+    //check connection
+if($conn->connect_error){
+  die("Fatal Error");
+
+}
+
+//sanitize user input
+function sanitizeEntitiesInput($input, $connection){
+  return htmlentities(sanitizeInput($input, $connection));
+}
+
+function sanitizeInput($input, $connection){
+  return $connection->real_escape_string($input);
+}
+
 
 
 //add data to database
-function addGame($name, $publisher, $developer, $date){
-    require_once 'login.php';
+function addGame($name, $publisher, $developer, $date, $connection){
+   /* require_once 'login.php';
 
 //create connection
     $conn = new mysqli($hn, $un, $pw, $db);
@@ -15,22 +34,22 @@ function addGame($name, $publisher, $developer, $date){
     if($conn->connect_error){
         die("Fatal Error");
 
-    }
+    }*/
 
-    if($stmt = $conn->prepare("INSERT INTO games (game_name, publisher, developer, release_date) VALUES (?, ?, ?, ?)")){
+    if($stmt = $connection->prepare("INSERT INTO games (game_name, publisher, developer, release_date) VALUES (?, ?, ?, ?)")){
         $stmt->bind_param('ssss', $name, $publisher, $developer, $date);
         $stmt->execute();
         $result = $stmt->get_result();
         echo 'Game added!';
     }
     else {
-        $error = $conn->errno . ' ' . $conn->error;
+        $error = $connection->errno . ' ' . $connection->error;
         echo $error; // 1054 Unknown column 'foo' in 'field list'
         echo 'Game not added!';
     }
 
    
-    $conn->close();
+    $connection->close();
 }
 
 
@@ -45,6 +64,11 @@ function addGame($name, $publisher, $developer, $date){
 <html>
 <style> 
 html {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   background: rgb(63,94,251);
   background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
 }
@@ -179,30 +203,15 @@ html {
   <input type="button" onclick="location.href='index.php';" value="Main Menu" />
 </div>
     
-    
-        <?php
-        /*if(array_key_exists('addGameBtn', $_POST)) {
-            $nm = $_POST['gamename'];
-            $pub = $_POST['publisher'];
-            $dev = $_POST['developer'];
-            $reldate = $_POST['releasedate'];
-            addGame($nm, $pub, $dev, $reldate);
-        }
-        else if(array_key_exists('mainMenuBtn', $_POST)) {
-            header( "Location: mainMenu.php" );
-        }*/
-
-     
-
-        ?>
 
         <?php
         if(isset($_POST['addGameBtn'])){
-            $nm = $_POST['gamename'];
-            $pub = $_POST['publisher'];
-            $dev = $_POST['developer'];
+          //sanitize user input before submitting to database
+            $nm = sanitizeEntitiesInput(sanitizeInput($_POST['gamename'], $conn), $conn);
+            $pub = sanitizeEntitiesInput(sanitizeInput($_POST['publisher'], $conn), $conn);
+            $dev = sanitizeEntitiesInput(sanitizeInput($_POST['developer'], $conn), $conn);
             $reldate = $_POST['releasedate'];
-            addGame($nm, $pub, $dev, $reldate);
+            addGame($nm, $pub, $dev, $reldate, $conn);
         }
       
 

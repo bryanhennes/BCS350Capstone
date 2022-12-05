@@ -27,7 +27,8 @@ if(isset($_POST['username'])){
     }
   }
   else {
-    echo "Username does not exist!";
+    $message = "Username does not exist!";
+    alert_user($message);
   }
 
   
@@ -51,19 +52,42 @@ function alert_user($message) {
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body{ font: 14px sans-serif; width: 360px; margin: 0 auto; }
-        .wrapper{ width: 360px; padding: 20px; }
-        html {
-        background: rgb(63,94,251);
-        background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-        }
+
+    html {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      background: rgb(63,94,251);
+      background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    }
+      
+
+    input {
+      padding: 5px 14px;
+    }
+
+    input[type=submit]{
+      background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%);
+
+    }
+
+    #wrapper {
+      width: 280px;
+      margin: 0 auto;
+      background-color: #f0f0f2;
+      padding: 20px 50px 40px;
+      box-shadow: 1px 4px 10px 1px #aaa;
+      font-family: sans-serif;
+    }
+
+        
     </style>
 </head>
 <body>
-    <div class="wrapper">
+    <div id="wrapper">
         <h2>Login</h2>
-        <p>Please fill in your credentials to login.</p>
-
         <?php 
         if(!empty($login_err)){
             echo '<div class="alert alert-danger">' . $login_err . '</div>';

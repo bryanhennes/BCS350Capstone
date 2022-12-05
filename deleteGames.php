@@ -68,8 +68,8 @@ function displayGames($connection, $sql, $result) {
         table {
             margin: 0 auto;
             font-size: large;
-            border: 1px solid black;
-            background: linear-gradient(to right, #207cca 0%,#9f58a3 100%);
+            border: 2px solid black;
+            background: #fafcfa;
         }
  
         h1 {

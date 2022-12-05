@@ -27,9 +27,14 @@ function logout(){
 
 <style>
 html {
-  background: rgb(63,94,251);
-  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-}
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      background: rgb(63,94,251);
+      background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    }
 
 #feedback-form {
   width: 280px;
@@ -146,7 +151,6 @@ html {
   <div>
     <form method="post">
     <input type="button" onclick="location.href='displayGames.php';" value="Show Games" />
-    <input type="button" onclick="location.href='displayUsers.php';" value="Show Users" />
     <input type="button" onclick="location.href='addGames.php';" value="Add Game" />
     <input type="button" onclick="location.href='deleteGames.php';" value="Delete Game" />
     <input type="button" onclick="location.href='searchGames.php';" value="Search" />

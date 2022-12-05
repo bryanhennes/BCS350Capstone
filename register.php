@@ -3,36 +3,41 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 if(session_id() == ''){ session_start();}
 //retrieve mysql login data
+require_once 'login.php';
+$conn = new mysqli($hn, $un, $pw, $db);
+
+if($conn->connect_error){
+      // die("Fatal Error");
+
+}
+
+//sanitize user input
+function sanitizeEntitiesInput($input, $connection){
+  return htmlentities(sanitizeInput($input, $connection));
+}
+
+function sanitizeInput($input, $connection){
+  return $connection->real_escape_string($input);
+}
 
 
 //add data to database
-function addUser($userName, $firstName, $lastName, $email, $date, $password){
-  require_once 'login.php';
-
-//create connection
-    $conn = new mysqli($hn, $un, $pw, $db);
-
-    if($conn->connect_error){
-       // die("Fatal Error");
-
-    }
-
+function addUser($userName, $firstName, $lastName, $email, $date, $password, $connection){
+ 
     $checkSql = "SELECT * FROM users WHERE username ='$userName'";
-    $checkResult = $conn->query($checkSql);
+    $checkResult = $connection->query($checkSql);
 
     //check if username already exists
     if (mysqli_num_rows($checkResult)>0){
       echo '<script>alert("Username already taken. Please choose another one.")</script>';
 
     }
-    else if($stmt = $conn->prepare("INSERT INTO Users (username, firstname, lastname, email, joindate, passwd) VALUES (?, ?, ?, ?, ?, ?)")){
-        $stmt->bind_param('ssssss', htmlentities($conn->real_escape_string($userName)), htmlentities($conn->real_escape_string($firstName)), $lastName, $email, $date, $password);
+    else if($stmt = $connection->prepare("INSERT INTO Users (username, firstname, lastname, email, joindate, passwd) VALUES (?, ?, ?, ?, ?, ?)")){
+        $stmt->bind_param('ssssss', htmlentities($connection->real_escape_string($userName)), htmlentities($connection->real_escape_string($firstName)), $lastName, $email, $date, $password);
         $stmt->execute();
         $result = $stmt->get_result();
         header("Location: index.php");
-        echo 'User added!';
-        //session_start();
-
+        echo '<script>alert("User created! Please login.")</script>';
         ?>
         <script>
           window.location = 'http://localhost/BCS350Capstone/index.php';
@@ -41,8 +46,8 @@ function addUser($userName, $firstName, $lastName, $email, $date, $password){
         <?php
     }
     else {
-        $error = $conn->errno . ' ' . $conn->error;
-        echo $error; // 1054 Unknown column 'foo' in 'field list'
+        $error = $connection->errno . ' ' . $connection->error;
+        echo $error;
         echo 'User not added!';
     }
   }
@@ -143,9 +148,14 @@ function validatePasswordsMatch(field, pass){
 
 <style> 
 html {
-        background: rgb(63,94,251);
-        background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-        }
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background: rgb(63,94,251);
+  background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+}
 
 #feedback-form {
   width: 280px;
@@ -261,7 +271,7 @@ html {
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
        
-        <div id="feedback-form">
+  <div id="feedback-form">
   <h2 class="header">Register</h2>
   <div>
     <form method="post" id="regForm" onSubmit="return validate(this)">
@@ -288,15 +298,17 @@ html {
         if(isset($_POST['registerBtn'])){
           ?>   
             <?php
-            $un = $_POST['username'];
-            $fn = $_POST['firstname'];
-            $ln = $_POST['lastname'];
-            $em = $_POST['email'];
-            $hashedPw = password_hash($_POST['password'], PASSWORD_DEFAULT); //hash password
+            //sanitize user input before submitting to database
+            $un = sanitizeEntitiesInput(sanitizeInput($_POST['username'], $conn), $conn);
+            $fn = sanitizeEntitiesInput(sanitizeInput($_POST['firstname'], $conn), $conn);
+            $ln = sanitizeEntitiesInput(sanitizeInput($_POST['lastname'], $conn), $conn);
+            $em = sanitizeEntitiesInput(sanitizeInput($_POST['email'], $conn), $conn);
+            $pw = sanitizeEntitiesInput(sanitizeInput($_POST['password'], $conn), $conn);
+            $hashedPw = password_hash($pw, PASSWORD_DEFAULT); //hash password
             $joinDate = date("Y/m/d");
             //session_start();
-            $_SESSION['username'] =$un;
-            addUser($un, $fn, $ln, $em, $joinDate, $hashedPw);
+            //$_SESSION['username'] =$un;
+            addUser($un, $fn, $ln, $em, $joinDate, $hashedPw, $conn);
               ?>
          
 
