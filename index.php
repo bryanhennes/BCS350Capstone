@@ -19,6 +19,7 @@ function logout(){
   header("Location: loginMain.php");
 }
 
+
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +37,13 @@ html {
       background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
     }
 
-#feedback-form {
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: sans-serif;
+}
+
+#form {
   width: 280px;
   margin: 0 auto;
   background-color: #fcfcfc;
@@ -45,20 +52,20 @@ html {
   font-family: sans-serif;
 }
 
-#feedback-form * {
+#form * {
     box-sizing: border-box;
 }
 
-#feedback-form h2{
+#form h2{
   text-align: center;
   margin-bottom: 30px;
 }
 
-#feedback-form input {
+#form input {
   margin-bottom: 15px;
 }
 
-#feedback-form input[type=text] {
+#form input[type=text] {
   display: block;
   height: 32px;
   padding: 6px 16px;
@@ -67,26 +74,7 @@ html {
   background-color: #f3f3f3;
 }
 
-#feedback-form label {
-  color: #777;
-  font-size: 0.8em;
-}
-
-#feedback-form input[type=checkbox] {
-  float: left;
-}
-
-#feedback-form input:not(:checked) + #feedback-phone {
-  height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-#feedback-form #feedback-phone {
-  transition: .3s;
-}
-
-#feedback-form input[type=submit] {
+#form input[type=submit] {
   display: block;
   margin: 20px auto 0;
   width: 150px;
@@ -96,8 +84,7 @@ html {
   color: #eee;
   font-weight: 700;
   box-shadow: 1px 4px 10px 1px #aaa;
-  cursor: pointer;
-  
+  cursor: pointer; 
   background: #207cca; /* Old browsers */
   background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
@@ -105,7 +92,7 @@ html {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#9f58a3',GradientType=1 ); /* IE6-9 */
 }
 
-#feedback-form input[type=button] {
+#form input[type=button] {
   display: block;
   margin: 20px auto 0;
   width: 150px;
@@ -116,7 +103,6 @@ html {
   font-weight: 700;
   box-shadow: 1px 4px 10px 1px #aaa;
   cursor: pointer;
-  
   background: #207cca; /* Old browsers */
   background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
@@ -136,17 +122,8 @@ html {
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-            
-
-    <!--<form method="post" action="dbprocess.php">
-        <input type="submit" name="gamesBtn"
-                class="button" value="Show Games" />
-          
-        <input type="submit" name="usersBtn"
-                class="button" value="Show Users" />
-    </form> -->
-
-    <div id="feedback-form">
+    <h1>Steam Video Game Database</h1>
+    <div id="form">
   <h2 class="header">Welcome, <?php echo $_SESSION['username'];?></h2>
   <div>
     <form method="post">

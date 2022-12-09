@@ -1,14 +1,16 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if(session_id() == ''){ session_start();}
+if(session_id() == ''){ 
+  session_start();
+}
+
 //retrieve mysql login data
 require_once 'login.php';
 $conn = new mysqli($hn, $un, $pw, $db);
 
 if($conn->connect_error){
-      // die("Fatal Error");
-
+  die("Fatal Error");
 }
 
 //sanitize user input
@@ -40,10 +42,11 @@ function addUser($userName, $firstName, $lastName, $email, $date, $password, $co
         echo '<script>alert("User created! Please login.")</script>';
         ?>
         <script>
-          window.location = 'http://localhost/BCS350Capstone/index.php';
+          window.location = 'http://localhost/BCS350Capstone/index.php'; //go to home page main menu when logged in to newly created account
         </script>
-
+        
         <?php
+        $connection->close();
     }
     else {
         $error = $connection->errno . ' ' . $connection->error;
@@ -56,7 +59,7 @@ function addUser($userName, $firstName, $lastName, $email, $date, $password, $co
 
   
 
-
+  //$conn->close();
 
 ?>
 <!DOCTYPE html>
@@ -67,71 +70,74 @@ function addUser($userName, $firstName, $lastName, $email, $date, $password, $co
 <html>
 
 <script>
-function validate(form) //A form object is passed into the function
-{
-
+function validate(form) {
+  //validate each field value
   fail = validateForename(form.firstname.value)
   fail += validateSurname(form.lastname.value)
   fail += validateUsername(form.username.value)
   fail += validatePassword(form.password.value)
-  fail += validateEmail(form.email.value) //validate each field value
+  fail += validateEmail(form.email.value) 
   fail += validatePasswordsMatch(form.confirmpassword.value, form.password.value)
-  if (fail == ""){//alert("User created! Please login!"); 
-    return true }//if no error, return true
-  else { alert(fail); return false } //if any error, show errors and return false
+  if (fail == ""){
+    return true //if no error, return true
+  }
+  else { 
+    alert(fail); 
+    return false //if any error, show errors and return false
+  } 
 }
 
-
+//validate first name
 function validateForename(field) {
-
   return (field == "") ? "No Forename was entered.\n" : ""
-  //Conditional operator is used to check if field is an empty string
-  
 }
-function validateSurname(field) {
 
+//validate last name
+function validateSurname(field) {
   return (field == "") ? "No Surname was entered.\n" : ""
 }
 
 
-function validateUsername(field)
-{
+function validateUsername(field) {
   if (field == "")
-  return "No Username was entered.\n"
+    return "No Username was entered.\n"
   else if (field.length < 5)
-  return "Usernames must be at least 5 characters.\n"
+    return "Usernames must be at least 5 characters.\n"
   else if (/[^a-zA-Z0-9_-]/.test(field)) //if a character not in the list is found
-  //JavaScript test function tests for a match in a string
-  return "Only a-z, A-Z, 0-9, - and _ allowed in Usernames.\n"
+    return "Only a-z, A-Z, 0-9, - and _ allowed in Usernames.\n"
   return ""
 }
 
 function validatePassword(field){
 
-  if (field == "") return "No Password was entered.\n"
+  if (field == "") 
+    return "No Password was entered.\n"
   else if (field.length < 6)
-  return "Passwords must be at least 6 characters.\n"
+    return "Passwords must be at least 6 characters.\n"
   else if (! /[a-z]/.test(field) || //if there is no character in the list of a to z
-  ! /[A-Z]/.test(field) || //if there is no character in the list of A to Z
-  ! /[0-9]/.test(field)) //if there is no character in the list of 0-9
-  return "Passwords require one each of a-z, A-Z and 0-9.\n"
+    ! /[A-Z]/.test(field) || //if there is no character in the list of A to Z
+    ! /[0-9]/.test(field)) //if there is no character in the list of 0-9
+    return "Passwords require one each of a-z, A-Z and 0-9.\n"
   return ""
 }
 
-function validateEmail(field){
+function validateEmail(field) {
 
-  if (field == "") return "No Email was entered.\n"
+  if (field == "") 
+    return "No Email was entered.\n"
   else if (!((field.indexOf(".") > 0) &&
-  (field.indexOf("@") > 0)) ||
-  /[^a-zA-Z0-9.@_-]/.test(field))
-  return "The Email address is invalid.\n"
+    (field.indexOf("@") > 0)) ||
+    /[^a-zA-Z0-9.@_-]/.test(field))
+    return "The Email address is invalid.\n"
   return ""
 }
 
 //check that confirm password field matches original password field
-function validatePasswordsMatch(field, pass){
-  if (field == "") return "Passwords must match.\n"
-  else if(field != pass) return "Passwords must match.\n"
+function validatePasswordsMatch(field, pass) {
+  if (field == "") 
+    return "Passwords must match.\n"
+  else if(field != pass) 
+    return "Passwords must match.\n"
   else return ""
 
 }
@@ -157,7 +163,7 @@ html {
   background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
 }
 
-#feedback-form {
+#form {
   width: 280px;
   margin: 0 auto;
   background-color: #fcfcfc;
@@ -166,20 +172,20 @@ html {
   font-family: sans-serif;
 }
 
-#feedback-form * {
+#form * {
     box-sizing: border-box;
 }
 
-#feedback-form h2{
+#form h2{
   text-align: center;
   margin-bottom: 30px;
 }
 
-#feedback-form input {
+#form input {
   margin-bottom: 15px;
 }
 
-#feedback-form input[type=text] {
+#form input[type=text] {
   display: block;
   height: 32px;
   padding: 6px 16px;
@@ -188,7 +194,7 @@ html {
   background-color: #f3f3f3;
 }
 
-#feedback-form input[type=password] {
+#form input[type=password] {
   display: block;
   height: 32px;
   padding: 6px 16px;
@@ -197,26 +203,17 @@ html {
   background-color: #f3f3f3;
 }
 
-#feedback-form label {
+#form label {
   color: #777;
   font-size: 0.8em;
 }
 
-#feedback-form input[type=checkbox] {
+#form input[type=checkbox] {
   float: left;
 }
 
-#feedback-form input:not(:checked) + #feedback-phone {
-  height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-}
 
-#feedback-form #feedback-phone {
-  transition: .3s;
-}
-
-#feedback-form input[type=submit] {
+#form input[type=submit] {
   display: block;
   margin: 20px auto 0;
   width: 150px;
@@ -226,8 +223,7 @@ html {
   color: #eee;
   font-weight: 700;
   box-shadow: 1px 4px 10px 1px #aaa;
-  cursor: pointer;
-  
+  cursor: pointer; 
   background: #207cca; /* Old browsers */
   background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
@@ -235,7 +231,7 @@ html {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#9f58a3',GradientType=1 ); /* IE6-9 */
 }
 
-#feedback-form input[type=button] {
+#form input[type=button] {
   display: block;
   margin: 20px auto 0;
   width: 150px;
@@ -246,7 +242,6 @@ html {
   font-weight: 700;
   box-shadow: 1px 4px 10px 1px #aaa;
   cursor: pointer;
-  
   background: #207cca; /* Old browsers */
   background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
@@ -271,14 +266,10 @@ html {
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
        
-  <div id="feedback-form">
+  <div id="form">
   <h2 class="header">Register</h2>
   <div>
     <form method="post" id="regForm" onSubmit="return validate(this)">
-      <script>
-        
-
-      </script>
       <input type="text" id="username" name="username" placeholder="Username" required></input>
       <input type="text" id="firstname" name="firstname" placeholder="First Name" required></input>
       <input type="text" id="lastname" name="lastname" placeholder="Last Name" required></input>
@@ -306,8 +297,7 @@ html {
             $pw = sanitizeEntitiesInput(sanitizeInput($_POST['password'], $conn), $conn);
             $hashedPw = password_hash($pw, PASSWORD_DEFAULT); //hash password
             $joinDate = date("Y/m/d");
-            //session_start();
-            //$_SESSION['username'] =$un;
+
             addUser($un, $fn, $ln, $em, $joinDate, $hashedPw, $conn);
               ?>
          

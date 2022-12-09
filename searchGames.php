@@ -10,6 +10,15 @@ if($conn->connect_error){
 
 }
 
+//sanitize user input
+function sanitizeEntitiesInput($input, $connection){
+  return htmlentities(sanitizeInput($input, $connection));
+}
+
+function sanitizeInput($input, $connection){
+  return $connection->real_escape_string($input);
+}
+
 //use this function to see if there are any possible results from search query
 function checkResults($connection, $searchBy, $keyword){
 
@@ -47,6 +56,7 @@ function checkResults($connection, $searchBy, $keyword){
         }
 
   return $counter;
+  $connection->close();
 }
 
 function keywordToSearchBy($connection, $searchBy, $explosion){
@@ -87,7 +97,7 @@ function keywordToSearchBy($connection, $searchBy, $explosion){
           }
   }
   return $newKeyword;
-
+  $connection->close();
 }
 
 
@@ -95,9 +105,6 @@ function keywordToSearchBy($connection, $searchBy, $explosion){
 //search database for keyword inputted by user
 function search($connection, $keyword, $searchBy){
 
-   // $keywordExplode = explode(" ", $keyword); //split search entry by spaces to check each individual word
-
-    //$newKeyword = keywordToSearchBy($connection, $searchBy, $keywordExplode);
     //regular expression pattern to query similar terms from database
     $pattern = "/$keyword/i";
       
@@ -105,7 +112,7 @@ function search($connection, $keyword, $searchBy){
 
     //if user is searching by game name
     if($searchBy == 'gamename'){
-        $category = "game_name";
+      $category = "game_name";
     }
     else if($searchBy == 'publisher'){
       $category = "publisher";
@@ -128,39 +135,39 @@ function search($connection, $keyword, $searchBy){
     ?>
     <h1> Results for: <?php echo $searchBy.': "'.$keyword.'"'; ?> </h1>
     <table>
-    <tr>
-        <th>Game</th>
-        <th>Publisher</th>
-        <th>Developer</th>
-        <th>Release Date</th>
-    </tr>
+      <thead>
+        <tr>
+            <th>Game</th>
+            <th>Publisher</th>
+            <th>Developer</th>
+            <th>Release Date</th>
+        </tr>
+    </thead>
     <?php
-        $counter = 0;
+        //$counter = 0;
         while($rows=$result->fetch_assoc())
         {
-          if(preg_match($pattern, $rows[$category]) == 0){
-            
+          if(preg_match($pattern, $rows[$category]) == 0){ 
             $rows++;
           }
-          else{ $counter++;
+          else{ //$counter++;
     ?>
-    <tr>
-        <td><?php echo $rows['game_name'];?></td>
-        <td><?php echo $rows['publisher'];?></td>
-        <td><?php echo $rows['developer'];?></td>
-        <td><?php echo $rows['release_date'];?></td>
-    </tr>
+    <tbody>
+      <tr>
+          <td><?php echo $rows['game_name'];?></td>
+          <td><?php echo $rows['publisher'];?></td>
+          <td><?php echo $rows['developer'];?></td>
+          <td><?php echo $rows['release_date'];?></td>
+      </tr>
+    </tbody>
     <?php
           }
         } 
         ?>
 </table>
 <?php
-
+$connection->close();
 }
-
-//$conn->close();
-
 
 ?>
 
@@ -177,38 +184,49 @@ html {
 }
 
 table {
-            margin: 0 auto;
-            font-size: large;
-            border: 1px solid black;
-            background: #fafcfa;
-        }
- 
-        h1 {
-            text-align: center;
-            color: linear-gradient(to right, #207cca 0%,#9f58a3 100%);
-            font-size: xx-large;
-            font-family: 'Gill Sans', 'Gill Sans MT',
-            ' Calibri', 'Trebuchet MS', 'sans-serif';
-        }
- 
-        td {
-            background:#fafcfa;
-            border: 1px solid black;
-        }
- 
-        th,
-        td {
-            font-weight: bold;
-            border: 1px solid black;
-            padding: 10px;
-            text-align: center;
-        }
- 
-        td {
-            font-weight: lighter;
-        }
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
 
-#feedback-form {
+table thead tr {
+    background-color: #2b519e;
+    color: #ffffff;
+    text-align: left;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #dddddd;
+    background: #f3f3f3;
+}
+
+
+table tbody tr:last-of-type {
+    border-bottom: 2px solid #2b519e;
+}
+
+table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+h1 {
+    text-align: center;
+    color: linear-gradient(to right, #207cca 0%,#9f58a3 100%);
+    font-size: xx-large;
+    font-family: 'Gill Sans', 'Gill Sans MT',
+    ' Calibri', 'Trebuchet MS', 'sans-serif';
+}
+
+
+#form {
   width: 280px;
   margin: 0 auto;
   background-color: #fcfcfc;
@@ -217,20 +235,20 @@ table {
   font-family: sans-serif;
 }
 
-#feedback-form * {
+#form * {
     box-sizing: border-box;
 }
 
-#feedback-form h2{
+#form h2{
   text-align: center;
   margin-bottom: 30px;
 }
 
-#feedback-form input {
+#form input {
   margin-bottom: 15px;
 }
 
-#feedback-form input[type=text] {
+#form input[type=text] {
   display: block;
   height: 32px;
   padding: 6px 16px;
@@ -239,26 +257,16 @@ table {
   background-color: #f3f3f3;
 }
 
-#feedback-form label {
+#form label {
   color: #777;
   font-size: 0.8em;
 }
 
-#feedback-form input[type=checkbox] {
+#form input[type=checkbox] {
   float: left;
 }
 
-#feedback-form input:not(:checked) + #feedback-phone {
-  height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-#feedback-form #feedback-phone {
-  transition: .3s;
-}
-
-#feedback-form input[type=submit] {
+#form input[type=submit] {
   display: block;
   margin: 20px auto 0;
   width: 150px;
@@ -277,7 +285,7 @@ table {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#9f58a3',GradientType=1 ); /* IE6-9 */
 }
 
-#feedback-form input[type=button] {
+#form input[type=button] {
   display: block;
   margin: 20px auto 0;
   width: 150px;
@@ -312,17 +320,7 @@ table {
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <!--<div class="form">
-        <form method="post">
-           Game Name: <input type="text" id="name" name="gamename" required /><br>
-           Publisher: <input type="text" name="publisher" required /><br>
-            Developer: <input type="text" name="developer" required /><br>
-            Release Date: <input type="text" name="releasedate" required /><br>
-            <input type="submit" value="Add Game" name="addGameBtn"/><br>
-            
-
-        </form>-->
-        <div id="feedback-form">
+  <div id="form">
   <h2 class="header">Search for a Game</h2>
   <div>
     <form method="post">
@@ -335,10 +333,6 @@ table {
             <option value="releasedate">Release Date</option>
         </select>
       <input type="text" name="searchField" placeholder="Keyword" required></input>
-      <!--
-      <input type="text" name="publisher" placeholder="Publisher" required></input>
-      <input type="text" name="developer" placeholder="Developer" required></input>
-      <input type="text" name="releasedate" placeholder="Release Date" required></input> -->
       <input type="submit" value="Search" id="searchBtn" name="searchBtn"/><br>
     </form>
   </div>
@@ -350,13 +344,10 @@ table {
         //selection from dropdown
         if(isset($_POST['searchBtn'])){
             $selectOption = $_POST['options']; //get field user is searching in
-            $searchTerm = $conn->real_escape_string($_POST['searchField']); //get keyword user is searching for
+            $searchTerm = sanitizeEntitiesInput(sanitizeInput($_POST['searchField'], $conn), $conn); //get keyword user is searching for
+            //$searchTerm = $conn->real_escape_string($_POST['searchField']);
             search($conn, $searchTerm, $selectOption); //search
-            //$results = getAllGames($conn);
-            //$pattern = "/$searchTerm/i";
-            //echo preg_match($pattern, $results[0]);
-            
-    
+
         } 
 
       

@@ -26,35 +26,64 @@ function sanitizeInput($input, $connection){
 
 //add data to database
 function addGame($name, $publisher, $developer, $date, $connection){
-   /* require_once 'login.php';
-
-//create connection
-    $conn = new mysqli($hn, $un, $pw, $db);
-    //check connection
-    if($conn->connect_error){
-        die("Fatal Error");
-
-    }*/
 
     if($stmt = $connection->prepare("INSERT INTO games (game_name, publisher, developer, release_date) VALUES (?, ?, ?, ?)")){
         $stmt->bind_param('ssss', $name, $publisher, $developer, $date);
         $stmt->execute();
         $result = $stmt->get_result();
-        echo 'Game added!';
+        echo '<script>alert("Game Added!")</script>';
     }
     else {
         $error = $connection->errno . ' ' . $connection->error;
         echo $error; // 1054 Unknown column 'foo' in 'field list'
-        echo 'Game not added!';
+        echo '<script>alert("Issue Adding Game!")</script>';
     }
 
    
     $connection->close();
 }
-
-
-
 ?>
+
+<script>
+function validate(form) {
+  //validate each field value
+  fail = validateGameName(form.gamename.value)
+  fail += validatePublisher(form.publisher.value)
+  fail += validateDeveloper(form.developer.value)
+  fail += validateDate(form.releasedate.value)
+
+  if (fail == ""){
+    return true //if no error, return true
+  }
+  else { 
+    alert(fail); 
+    return false //if any error, show errors and return false
+  } 
+}
+
+//validate game name was entered
+function validateGameName(field) {
+  return (field == "") ? "No Game Name was entered.\n" : ""
+}
+
+//validate publisher name was entered
+function validatePublisher(field) {
+  return (field == "") ? "No Publisher was entered.\n" : ""
+}
+
+//validate developer name was entered
+function validateDeveloper(field) {
+  return (field == "") ? "No Developer was entered.\n" : ""
+}
+
+//validate release date was entered
+function validateDate(field){
+  return (field == "") ? "No Release Date was entered.\n" : ""
+}
+
+
+
+</script>
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -73,7 +102,7 @@ html {
   background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
 }
 
-#feedback-form {
+#form {
   width: 280px;
   margin: 0 auto;
   background-color: #fcfcfc;
@@ -82,20 +111,20 @@ html {
   font-family: sans-serif;
 }
 
-#feedback-form * {
-    box-sizing: border-box;
+#form * {
+  box-sizing: border-box;
 }
 
-#feedback-form h2{
+#form h2{
   text-align: center;
   margin-bottom: 30px;
 }
 
-#feedback-form input {
+#form input {
   margin-bottom: 15px;
 }
 
-#feedback-form input[type=text] {
+#form input[type=text] {
   display: block;
   height: 32px;
   padding: 6px 16px;
@@ -104,26 +133,12 @@ html {
   background-color: #f3f3f3;
 }
 
-#feedback-form label {
+#form label {
   color: #777;
   font-size: 0.8em;
 }
 
-#feedback-form input[type=checkbox] {
-  float: left;
-}
-
-#feedback-form input:not(:checked) + #feedback-phone {
-  height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-#feedback-form #feedback-phone {
-  transition: .3s;
-}
-
-#feedback-form input[type=submit] {
+#form input[type=submit] {
   display: block;
   margin: 20px auto 0;
   width: 150px;
@@ -134,7 +149,6 @@ html {
   font-weight: 700;
   box-shadow: 1px 4px 10px 1px #aaa;
   cursor: pointer;
-  
   background: #207cca; /* Old browsers */
   background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
@@ -142,7 +156,7 @@ html {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#9f58a3',GradientType=1 ); /* IE6-9 */
 }
 
-#feedback-form input[type=button] {
+#form input[type=button] {
   display: block;
   margin: 20px auto 0;
   width: 150px;
@@ -153,7 +167,6 @@ html {
   font-weight: 700;
   box-shadow: 1px 4px 10px 1px #aaa;
   cursor: pointer;
-  
   background: #207cca; /* Old browsers */
   background: -moz-linear-gradient(left, #207cca 0%, #9f58a3 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(left, #207cca 0%,#9f58a3 100%); /* Chrome10-25,Safari5.1-6 */
@@ -177,24 +190,14 @@ html {
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <!--<div class="form">
-        <form method="post">
-           Game Name: <input type="text" id="name" name="gamename" required /><br>
-           Publisher: <input type="text" name="publisher" required /><br>
-            Developer: <input type="text" name="developer" required /><br>
-            Release Date: <input type="text" name="releasedate" required /><br>
-            <input type="submit" value="Add Game" name="addGameBtn"/><br>
-            
-
-        </form>-->
-        <div id="feedback-form">
+        
+  <div id="form">
   <h2 class="header">Add a Game</h2>
   <div>
-    <form method="post">
+    <form method="post" onSubmit="return validate(this)">
       <input type="text" name="gamename" placeholder="Game Name" required></input>
       <input type="text" name="publisher" placeholder="Publisher" required></input>
       <input type="text" name="developer" placeholder="Developer" required></input>
-      <!--<input type="text" name="releasedate" placeholder="Release Date (YYYY-DD-MM)" required></input>-->
       <label for="releasedate">Release Date:</label>
       <input type="date" id="releasedate" name="releasedate" min="1950-01-01" max="2025-12-31" required></input>
       <input type="submit" value="Add Game" id="addGameBtn" name="addGameBtn"/><br>

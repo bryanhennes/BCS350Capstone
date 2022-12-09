@@ -10,7 +10,6 @@ if(isset($_POST['username'])){
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  //$sql = "SELECT * FROM users WHERE username ='$username' AND passwd='$password'";
   $sql = "SELECT * FROM users WHERE username ='$username'";
   $result = $conn->query($sql);
 
@@ -38,6 +37,8 @@ function alert_user($message) {
       // Display the alert box 
   echo "<script>alert('$message');</script>";
 }
+
+$conn->close();
 
 ?>
 
